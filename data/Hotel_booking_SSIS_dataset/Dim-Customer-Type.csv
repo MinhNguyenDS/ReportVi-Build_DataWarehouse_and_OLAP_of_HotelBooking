@@ -1,0 +1,5 @@
+id_customer_type,customer_type
+1,Contract
+2,Group
+3,Transient
+4,Transient-Party
