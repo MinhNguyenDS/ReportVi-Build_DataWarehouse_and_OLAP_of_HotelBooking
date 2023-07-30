@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<DTS:ConnectionManager xmlns:DTS="www.microsoft.com/SqlServer/Dts"
+  DTS:ObjectName="MSI_MSI.DB_HotelBooking_ORG"
+  DTS:DTSID="{B715D13E-58CB-4432-A4BA-83C7E1987110}"
+  DTS:CreationName="OLEDB">
+  <DTS:ObjectData>
+    <DTS:ConnectionManager
+      DTS:ConnectRetryCount="1"
+      DTS:ConnectRetryInterval="5"
+      DTS:ConnectionString="Data Source=MSI\MSI;Initial Catalog=DB_HotelBooking_ORG;Provider=SQLNCLI11.1;Integrated Security=SSPI;Application Name=SSIS-Hotel_Booking_SSIS-{B715D13E-58CB-4432-A4BA-83C7E1987110}MSI\MSI.DB_HotelBooking_ORG;Auto Translate=False;" />
+  </DTS:ObjectData>
+</DTS:ConnectionManager>

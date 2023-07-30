@@ -1,0 +1,120 @@
+﻿// Câu 1:Thống kê tổng số lượng khách hàng đặt phòng, tổng doanh thu của từng loại khách sạn theo từng quý của năm.
+
+SELECT NON EMPTY{[Measures].[Adr],[Measures].[Fact Count]} ON ROWS,
+NON EMPTY {[Dim Arrival Time].[Year].children*[Dim Arrival Time].[Quarter Name].children} ON COLUMNS
+FROM [DB Hotel Booking]
+
+// Câu 2:Thống kê doanh thu theo phân khúc khách hàng (Market_segment) theo từng tháng của năm.
+
+SELECT NON EMPTY{[Measures].[Adr]} ON ROWS,
+NON EMPTY {[Dim Market Segment].[Market Segment].children*
+			[Dim Arrival Time].[Year].children*
+			[Dim Arrival Time].[Month Name].children} ON COLUMNS
+FROM [DB Hotel Booking]
+
+// Câu 3:Thống kê doanh thu theo kênh phân phối theo từng tháng của năm.
+
+SELECT NON EMPTY{[Measures].[Adr]} ON ROWS,
+NON EMPTY {[Dim Distribution Channel].[Distribution Channel].children*
+			[Dim Arrival Time].[Year].children*
+			[Dim Arrival Time].[Month Name].children} ON COLUMNS
+FROM [DB Hotel Booking]
+
+// Câu 4:Thống kê top 10 quốc gia có doanh thu cao nhất trong năm 2015 và 2016, sắp xếp các giá trị theo thứ tự giảm dần.
+
+SELECT NON EMPTY{[Measures].[Adr]} ON COLUMNS,
+NON EMPTY {GENERATE(
+				[Dim Customer].[Country].MEMBERS,
+				TOPCOUNT([Dim Customer].[Country].children,10,[Measures].[Adr]))} ON ROWS
+FROM [DB Hotel Booking]
+WHERE [Dim Arrival Time].[Year].&[2016]
+
+// Câu 5:Thống kê tổng thời gian chờ của khách hàng (lead_time) theo từng Quốc gia theo từng tháng của năm.
+
+SELECT NON EMPTY{[Measures].[Lead Time]} ON ROWS,
+NON EMPTY {[Dim Arrival Time].[Quarter Name].children*[Dim Arrival Time].[Month Name].children} ON COLUMNS
+FROM [DB Hotel Booking]
+
+//  Câu 6:Thống kê có bao nhiêu khách hàng là người lớn, bao nhiêu khách hàng là trẻ em và bao nhiêu khách hàng là em bé trong từng tháng của năm
+
+SELECT {[Measures].[Adults],[Measures].[Children],[Measures].[Babies]} ON COLUMNS,
+NON EMPTY{([Dim Arrival Time].[Year].[Year].allmembers*
+			[Dim Arrival Time].[Month Name].[Month Name].allmembers)} ON ROWS
+FROM [DB Hotel Booking]
+
+// Câu 7:Thống kê thông tin top 50 khách hàng có chi tiêu cao nhất trong năm trước (2016).
+
+SELECT NON EMPTY{[Measures].[Adr]} ON COLUMNS,
+NON EMPTY{TOPCOUNT
+			({([Dim Customer].[Name].[Name].allmembers
+			*[Dim Customer].[Country].[Country].allmembers
+			*[Dim Customer].[Phone-number].[Phone-number].allmembers
+			*[Dim Customer].[Email].[Email].allmembers
+			*[Dim Customer].[Customer Type].[Customer Type].allmembers
+			*[Dim Arrival Time].[Year].[Year].allmembers)}, 50, [Measures].[Adr])} ON ROWS
+FROM (SELECT({[Dim Arrival Time].[Year].&[2016]}) ON COLUMNS FROM [DB Hotel Booking])
+
+// Câu 8:Thống kê tên top 5 khách hàng có chi tiêu cao nhất theo từng tháng của năm 2016.
+
+SELECT NON EMPTY{[Measures].[Adr]} ON COLUMNS,
+NON EMPTY{
+			GENERATE([Dim Arrival Time].[Month Name].children,
+			TOPCOUNT({[Dim Arrival Time].[Month Name].currentmember*[Dim Customer].[Name].children},
+					5, [Measures].[Adr]))} ON ROWS
+FROM [DB Hotel Booking]
+WHERE [Dim Arrival Time].[Year].&[2016]
+
+//Câu 9: Thống kê email top 3 khách hàng có doanh số cao nhất theo quốc gia năm 2016.
+
+SELECT NON EMPTY{[Measures].[Adr]} ON COLUMNS,
+NON EMPTY {GENERATE([Dim Customer].[Country].children,
+			TOPCOUNT([Dim Customer].[Country].currentmember*[Dim Customer].[Email].children,
+					3, [Measures].[Adr]))} ON ROWS
+FROM [DB Hotel Booking]
+WHERE [Dim Arrival Time].[Year].&[2016]
+
+//Câu 10:Thống kê top 10 thông tin khách hàng kèm chi tiêu của họ có thời gian chờ lâu nhất theo từng quốc gia năm 2016.
+
+SELECT NON EMPTY {[Measures].[Lead Time],[Measures].[Adr]} ON COLUMNS,
+NON EMPTY {GENERATE([Dim Customer].[Country].children,
+			TOPCOUNT([Dim Customer].[Country].currentmember*[Dim Customer].[Name].children,
+						10, [Measures].[Lead Time])) } ON ROWS
+FROM [DB Hotel Booking] WHERE [Dim Arrival Time].[Year].&[2016]
+
+// Câu 11:Thống kê các quốc gia tạo ra tổng doanh thu lớn hơn 50000.
+
+SELECT NON EMPTY {[Measures].[Adr]} ON COLUMNS,
+NON EMPTY {[Dim Customer].[Country].children}
+HAVING [Measures].[Adr] > 50000 ON ROWS
+FROM [DB Hotel Booking]
+
+// Câu 12:Thống kê tổng thời gian chờ của từng phân khúc thị trường theo từng tháng, quý, năm.
+
+SELECT NON EMPTY {[Dim Market Segment].[Market Segment].children*[Measures].[Lead Time]} ON COLUMNS,
+NON EMPTY {[Dim Arrival Time].[Year].children*
+			[Dim Arrival Time].[Quarter Name].children*[Dim Arrival Time].[Month Name].children} ON ROWS
+FROM [DB Hotel Booking]
+
+// Câu 13:Liệt kê thông tin và doanh thu khách hàng đặt phòng với hình thức không đặt cọc trước và thuộc phân khúc thị trường đặt phòng trực tiếp.
+
+SELECT NON EMPTY {[Measures].[Adr]} ON COLUMNS,
+NON EMPTY {[Dim Customer].[Name].children*[Dim Customer].[Email].children*[Dim Customer].[Phone-number].children} ON ROWS
+FROM [DB Hotel Booking]
+WHERE ([Dim Deposit Type].[Deposit Type].&[No Deposit],[Dim Market Segment].[Market Segment].&[Direct])
+
+// Câu 14:Thống kê số lượng đặt phòng của khách hàng đến từ Bồ Đào Nha (PRT) thuộc từng phân khúc thị trường theo từng quý của từng năm.
+
+SELECT NON EMPTY {[Measures].[Fact Count]} ON COLUMNS,
+NON EMPTY {([Dim Arrival Time].[Year].children*
+			[Dim Arrival Time].[Quarter Name].children*
+			[Dim Market Segment].[Market Segment].children)} ON ROWS
+FROM [DB Hotel Booking]
+WHERE [Dim Customer].[Country].&[PRT]
+
+// Câu 15:Câu Thống kê doanh thu theo từng kênh phân phối của từng phân khúc trị trường của từng quốc gia.
+
+SELECT NON EMPTY {[Measures].[Adr]} ON COLUMNS,
+NON EMPTY {([Dim Customer].[Country].children*
+			[Dim Market Segment].[Market Segment].children*
+			[Dim Distribution Channel].[Distribution Channel].children)} ON ROWS
+FROM [DB Hotel Booking]

@@ -1,0 +1,23 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.33502.453
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{D2ABAB84-BF74-430A-B69E-9DC6D40DDA17}") = "Hotel_Booking_SSAS", "Hotel_Booking_SSAS\Hotel_Booking_SSAS.dwproj", "{5E1FE14C-E1EB-496E-8B28-5F8D14338075}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Development|Default = Development|Default
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5E1FE14C-E1EB-496E-8B28-5F8D14338075}.Development|Default.ActiveCfg = Development
+		{5E1FE14C-E1EB-496E-8B28-5F8D14338075}.Development|Default.Build.0 = Development
+		{5E1FE14C-E1EB-496E-8B28-5F8D14338075}.Development|Default.Deploy.0 = Development
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F49F1E9C-C141-4C18-8B21-FA9582E0206A}
+	EndGlobalSection
+EndGlobal
